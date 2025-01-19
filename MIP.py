@@ -64,6 +64,19 @@ def calculate_balance(user_id):
     conn.close()
     return total_income - total_expense
 
+def calculate_totals(user_id):
+    """Calculează totalurile pentru income și expenses pentru utilizatorul curent."""
+    conn = sqlite3.connect(DB_NAME)
+    cursor = conn.cursor()
+
+    cursor.execute("SELECT SUM(amount) FROM expenses WHERE type = 'income' AND user_id = ?", (user_id,))
+    total_income = cursor.fetchone()[0] or 0
+
+    cursor.execute("SELECT SUM(amount) FROM expenses WHERE type = 'expense' AND user_id = ?", (user_id,))
+    total_expenses = cursor.fetchone()[0] or 0
+
+    conn.close()
+    return total_income, total_expenses
 
 @app.route('/')
 @login_required
@@ -75,9 +88,12 @@ def index():
     expenses = cursor.fetchall()
     conn.close()
     
-    balance = calculate_balance(current_user.id)
+    total_income, total_expenses = calculate_totals(current_user.id)
     
-    return render_template("index.html", expenses=expenses, balance=balance)
+    balance = total_income - total_expenses
+    
+    return render_template("index.html", expenses=expenses, balance=balance, total_income=total_income, total_expenses=total_expenses)
+
 
 
 @app.route('/add', methods=["GET", "POST"])
@@ -100,8 +116,6 @@ def add():
         except Exception as e:
             return f"An error occurred: {e}", 400
     return render_template("add.html")
-
-
 
 @app.route('/login', methods=["GET", "POST"])
 def login():
