@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        <h2>Add Expense or Income</h2>
+        <form method="POST">
+            <div class="mb-3">
+                <label for="amount" class="form-label">Amount:</label>
+                <input type="number" name="amount" step="0.01" class="form-control" required>
+            </div>
+            <div class="mb-3">
+                <label for="type" class="form-label">Type:</label>
+                <select name="type" id="type" class="form-select" required onchange="toggleCategoryField()">
+                    <option value="income">Income</option>
+                    <option value="expense">Expense</option>
+                </select>
+            </div>
+            <div class="mb-3" id="category-field" style="display: none;">
+                <label for="category" class="form-label">Category:</label>
+                <input type="text" name="category" class="form-control">
+            </div>
+            <button type="submit" class="btn btn-success btn-lg w-100">Save Transaction</button>
+        </form>
+    </div>
+</div>
+
+<script>
+function toggleCategoryField() {
+    const typeSelect = document.getElementById('type');
+    const categoryField = document.getElementById('category-field');
+    if (typeSelect.value === 'expense') {
+        categoryField.style.display = 'block';
+    } else {
+        categoryField.style.display = 'none';
+    }
+}
+</script>
+{% endblock %}

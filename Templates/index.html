@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col text-center">
+        <a href="/add" class="btn btn-primary btn-lg px-5 py-3">Add New Transaction</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <h2 class="mb-3">Transactions</h2>
+        <p class="lead"><strong>Current Balance:</strong> ${{ balance }}</p>
+
+        <table class="table table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Type</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td>${{ expense[1] }}</td>
+                    <td>
+                        {% if expense[3] == 'expense' %}
+                            {{ expense[2] }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+                    <td>{{ expense[3] }}</td>
+                    <td>
+                        <a href="/delete/{{ expense[0] }}" class="btn btn-danger btn-sm">Delete</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}
