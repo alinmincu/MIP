@@ -24,7 +24,6 @@
     <Compile Include="MIP.py" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Static\" />
     <Folder Include="Templates\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
