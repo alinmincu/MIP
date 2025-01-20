@@ -156,6 +156,30 @@ def register():
             return "Username already exists."
     return render_template("register.html")
 
+@app.route('/delete/<int:transaction_id>', methods=["POST"])
+@login_required
+def delete(transaction_id):
+    """Șterge o tranzacție specificată prin ID."""
+    try:
+        conn = sqlite3.connect(DB_NAME)
+        cursor = conn.cursor()
+
+        cursor.execute("SELECT * FROM expenses WHERE id = ? AND user_id = ?", (transaction_id, current_user.id))
+        transaction = cursor.fetchone()
+
+        if not transaction:
+            conn.close()
+            return "Transaction not found or unauthorized.", 403
+
+        cursor.execute("DELETE FROM expenses WHERE id = ?", (transaction_id,))
+        conn.commit()
+        conn.close()
+
+        return redirect(url_for('index'))
+    except Exception as e:
+        return f"An error occurred: {e}", 400
+
+
 if __name__ == '__main__':
     init_db()
     app.run(debug=True)

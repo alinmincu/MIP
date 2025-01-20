@@ -35,7 +35,9 @@
                     <td>{{ expense[2] or 'N/A' }}</td>
                     <td>{{ expense[3] }}</td>
                     <td>
-                        <a href="/delete/{{ expense[0] }}" class="btn btn-danger btn-sm">Delete</a>
+                        <form action="{{ url_for('delete', transaction_id=expense[0]) }}" method="POST" style="display: inline;">
+                            <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                        </form>
                     </td>
                 </tr>
                 {% endfor %}
